@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0877bd">
+<title>NU EXPORTS</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f6f9;color:#26384a}
+.container{max-width:1100px;margin:auto;padding:15px}.header{background:linear-gradient(135deg,#0877bd,#08a8d8);color:#fff;padding:20px;border-radius:18px;margin-bottom:12px;position:relative}.header h1{margin:0;font-size:30px}.header p{margin:5px 0 0}.menu-btn{position:absolute;right:15px;top:15px;background:#ffffff30;color:#fff;font-size:22px;padding:8px 12px}
+.top-search{background:#fff;padding:12px;border-radius:14px;box-shadow:0 2px 8px #d5dce2;margin-bottom:15px}.top-search input{width:100%;padding:14px;border:2px solid #0877bd;border-radius:10px;font-size:16px}
+.nav{display:flex;gap:8px;overflow-x:auto;margin-bottom:15px}.nav button{background:#fff;color:#31547c;border:1px solid #dbe3ea;white-space:nowrap;padding:11px 14px;border-radius:10px}.nav button.active{background:#0877bd;color:#fff}
+.dashboard{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:15px}.dashboard-box{background:#fff;padding:18px;border-radius:16px;box-shadow:0 2px 9px #d5dce2;cursor:pointer;border-left:5px solid #0877bd}.pending-box{border-left-color:#f39a28}.delivered-box{border-left-color:#159447}.percent-box{border-left-color:#7956d8}.dashboard-box .small{font-size:14px;color:#66788a}.dashboard-box strong{display:block;font-size:30px;margin-top:8px;color:#173b66}
+.card{background:#fff;padding:18px;border-radius:16px;margin-bottom:15px;box-shadow:0 2px 9px #d5dce2}h2{margin:0 0 15px;color:#31547c;font-size:20px}
+.quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.quick{border:1px solid #dbe3ea;background:#fff;text-align:left;padding:15px;border-radius:12px;color:#31547c}.quick .icon{font-size:22px;display:block;margin-bottom:8px}.quick strong{display:block}.quick span{font-size:12px;color:#78899a}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 15px}label{display:block;font-weight:bold;margin-top:12px;margin-bottom:5px}input,select{width:100%;padding:13px;border:1px solid #cbd4dc;border-radius:9px;font-size:16px;background:#fff;outline:none}
+.buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}button{border:0;border-radius:9px;padding:13px;font-size:15px;font-weight:bold;cursor:pointer}.save{background:#0877bd;color:#fff}.update{background:#159447;color:#fff}.clear{background:#777;color:#fff}.back{background:#687684;color:#fff;margin-bottom:12px}
+.recent-list{display:flex;flex-direction:column}.recent-row{display:grid;grid-template-columns:1.2fr 1.5fr .6fr .8fr;gap:10px;padding:12px 4px;border-bottom:1px solid #e7edf2;align-items:center}.recent-head{font-weight:bold;color:#60758b;font-size:13px}.recent-row div{font-size:14px}
+.report-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.report-box{background:#f7fafc;padding:15px;border-radius:12px;text-align:center;border:1px solid #e1e8ee}.report-box strong{display:block;font-size:24px;margin-top:5px;color:#173b66}
+.pending{color:#d88a00;font-weight:bold}.delivered{color:#118345;font-weight:bold}.badge{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold}.badge.pending{background:#fff2d7}.badge.delivered{background:#ddf6e8}
+.table-container{overflow-x:auto}table{width:100%;min-width:950px;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #ddd;text-align:left;font-size:14px}th{background:#0877bd;color:#fff}.action{color:#fff;padding:7px 9px;border-radius:7px;margin:2px;font-size:13px}.edit{background:#0877bd}.status{background:#159447}.delete{background:#d93636}
+.page{display:none}.page.active{display:block}.empty{text-align:center;padding:30px;color:#7a8996}.footer{text-align:center;color:#718293;font-size:12px;padding:15px}
+@media(max-width:750px){.container{padding:10px}.header h1{font-size:25px}.dashboard{grid-template-columns:repeat(2,1fr)}.quick-actions{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr}.report-grid{grid-template-columns:repeat(2,1fr)}.recent-row{grid-template-columns:1fr 1fr}.recent-head{display:none}}
+@media(max-width:450px){.dashboard-box strong{font-size:24px}.buttons{grid-template-columns:1fr}.nav button{padding:9px 12px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header"><h1>NU EXPORTS</h1><p>Transport & Parcel Management</p><button class="menu-btn" onclick="toggleNav()">☰</button></div>
+
+<div class="top-search"><input id="globalSearch" placeholder="🔎 Search LR Number or Transport Name..." oninput="globalSearch()"></div>
+
+<div class="nav" id="nav">
+<button class="active" onclick="openPage('dashboardPage',this)">🏠 Dashboard</button>
+<button onclick="openPage('bookingPage',this)">📦 New Booking</button>
+<button onclick="openPage('pendingPage',this)">⏳ Pending Parcels</button>
+<button onclick="openPage('deliveryPage',this)">✅ Delivery Parcels</button>
+<button onclick="openPage('dailyPage',this)">📅 Daily Report</button>
+<button onclick="openPage('transportReportPage',this)">🚚 Transport Report</button>
+<button onclick="openPage('backupPage',this)">💾 Backup</button>
+</div>
+
+<div id="dashboardPage" class="page active">
+<div class="dashboard">
+<div class="dashboard-box" onclick="openPageById('allPage')"><div class="small">📦 Total Parcels</div><strong id="totalCount">0</strong></div>
+<div class="dashboard-box pending-box" onclick="openPageById('pendingPage')"><div class="small">⏳ Pending Parcels</div><strong id="pendingCount">0</strong></div>
+<div class="dashboard-box delivered-box" onclick="openPageById('deliveryPage')"><div class="small">✅ Delivered Parcels</div><strong id="deliveredCount">0</strong></div>
+<div class="dashboard-box percent-box"><div class="small">📊 Delivery Success Rate</div><strong id="deliveryPercent">0%</strong></div>
+</div>
+
+<div class="card"><h2>⚡ Quick Reports</h2><div class="quick-actions">
+<button class="quick" onclick="openDailyToday()"><span class="icon">📅</span><strong>Today</strong><span>Daily Report →</span></button>
+<button class="quick" onclick="openDailyYesterday()"><span class="icon">📅</span><strong>Yesterday</strong><span>Daily Report →</span></button>
+<button class="quick" onclick="openWeekReport()"><span class="icon">📊</span><strong>This Week</strong><span>Weekly Report →</span></button>
+<button class="quick" onclick="openMonthReport()"><span class="icon">📊</span><strong>This Month</strong><span>Monthly Report →</span></button>
+</div></div>
+
+<div class="card"><h2>📋 Recent Bookings</h2><div class="recent-list" id="recentBookings"></div></div>
+
+<div class="card" style="border-left:5px solid #d97706"><h2>🔔 10 Days Pending Reminder</h2><p style="margin:0 0 10px;color:#66788a">Pending parcels booked 10 or more days ago</p><div class="report-box" onclick="openPageById('pendingPage')" style="cursor:pointer">10+ Days Pending<strong id="overdueCount">0</strong></div><div id="overdueList" style="margin-top:10px"></div></div>
+
+<div class="card"><h2>💰 Opening Balance</h2><div class="form-grid"><div><label>Freight Opening (₹)</label><input type="number" id="openingFreight" min="0" placeholder="0"></div><div><label>Local Freight Opening (₹)</label><input type="number" id="openingLocal" min="0" placeholder="0"></div></div><button class="save" style="margin-top:14px" onclick="saveOpeningBalance()">Save Opening Balance</button><p style="color:#66788a;font-size:13px;margin-bottom:0">Opening amount is added to booking totals.</p></div>
+
+<div class="card"><h2>💰 Freight Summary</h2><div class="report-grid">
+<div class="report-box">Total Freight<strong id="totalFreight">₹0</strong></div>
+<div class="report-box">Local Freight<strong id="totalLocalFreight">₹0</strong></div>
+<div class="report-box">Grand Total<strong id="grandTotal">₹0</strong></div>
+<div class="report-box">Articles<strong id="totalArticles">0</strong></div>
+</div></div>
+</div>
+
+<div id="bookingPage" class="page">
+<button class="back" onclick="showDashboard()">← Back to Dashboard</button>
+<div class="card"><h2>📦 New Booking</h2><div class="form-grid">
+<div><label>LR Number *</label><input id="lrNumber" placeholder="Enter LR Number"></div>
+<div><label>Transport Name *</label><input id="transportName" placeholder="Enter Transport Name"></div>
+<div><label>Number of Articles *</label><input type="number" id="articles" min="1" placeholder="Enter Articles"></div>
+<div><label>Freight Amount</label><input type="number" id="freight" min="0" placeholder="₹ 0"></div>
+<div><label>Local Freight Amount</label><input type="number" id="localFreight" min="0" placeholder="₹ 0"></div>
+<div><label>Booking Date</label><input type="date" id="bookingDate"></div>
+<div><label>Delivery Date</label><input type="date" id="deliveryDate"></div>
+<div><label>Delivery Status</label><select id="deliveryStatus"><option>Pending</option><option>Delivered</option></select></div>
+</div><div class="buttons"><button class="save" onclick="saveParcel()">💾 SAVE</button><button class="update" onclick="updateParcel()">✏️ UPDATE</button><button class="clear" onclick="clearForm()">🧹 CLEAR</button></div></div>
+</div>
+
+<div id="allPage" class="page"><button class="back" onclick="showDashboard()">← Back to Dashboard</button><div class="card"><h2>📦 All Parcels</h2><div class="table-container"><table><thead><tr><th>LR Number</th><th>Transport</th><th>Articles</th><th>Freight</th><th>Local Freight</th><th>Booking Date</th><th>Delivery Date</th><th>Status</th><th>Action</th></tr></thead><tbody id="allTable"></tbody></table></div></div></div>
+
+<div id="pendingPage" class="page"><button class="back" onclick="showDashboard()">← Back to Dashboard</button><div class="card"><h2>⏳ Pending Parcels</h2><div class="report-grid"><div class="report-box">Pending Parcels<strong id="pendingPageCount">0</strong></div><div class="report-box">Articles<strong id="pendingArticles">0</strong></div><div class="report-box">Freight<strong id="pendingFreight">₹0</strong></div><div class="report-box">Local Freight<strong id="pendingLocal">₹0</strong></div></div></div><div class="card"><div class="table-container"><table><thead><tr><th>LR Number</th><th>Transport</th><th>Articles</th><th>Freight</th><th>Local Freight</th><th>Booking Date</th><th>Delivery Date</th><th>Status</th><th>Action</th></tr></thead><tbody id="pendingTable"></tbody></table></div></div></div>
+
+<div id="deliveryPage" class="page"><button class="back" onclick="showDashboard()">← Back to Dashboard</button><div class="card"><h2>✅ Delivery Parcels</h2><div class="report-grid"><div class="report-box">Delivered Parcels<strong id="deliveryPageCount">0</strong></div><div class="report-box">Articles<strong id="deliveryArticles">0</strong></div><div class="report-box">Freight<strong id="deliveryFreight">₹0</strong></div><div class="report-box">Local Freight<strong id="deliveryLocal">₹0</strong></div></div></div><div class="card"><div class="table-container"><table><thead><tr><th>LR Number</th><th>Transport</th><th>Articles</th><th>Freight</th><th>Local Freight</th><th>Booking Date</th><th>Delivery Date</th><th>Status</th><th>Action</th></tr></thead><tbody id="deliveryTable"></tbody></table></div></div></div>
+
+<div id="dailyPage" class="page"><button class="back" onclick="showDashboard()">← Back to Dashboard</button><div class="card"><h2>📅 Daily Delivery Report</h2><label>Select Delivery Date</label><input type="date" id="dailyDate" onchange="displayDailyReport()"></div><div class="card"><div class="report-grid"><div class="report-box">Parcels<strong id="dailyParcels">0</strong></div><div class="report-box">Articles<strong id="dailyArticles">0</strong></div><div class="report-box">Freight<strong id="dailyFreight">₹0</strong></div><div class="report-box">Local Freight<strong id="dailyLocal">₹0</strong></div></div></div><div class="card"><div class="table-container"><table><thead><tr><th>LR</th><th>Transport</th><th>Articles</th><th>Freight</th><th>Local Freight</th><th>Delivery Date</th></tr></thead><tbody id="dailyTable"></tbody></table></div></div></div>
+
+<div id="transportReportPage" class="page"><button class="back" onclick="showDashboard()">← Back to Dashboard</button><div class="card"><h2>🚚 Transport-wise Report</h2><label>Select Transport</label><select id="reportTransport" onchange="displayTransportReport()"></select></div><div class="card"><div class="report-grid"><div class="report-box">Parcels<strong id="transportParcels">0</strong></div><div class="report-box">Pending<strong id="transportPending">0</strong></div><div class="report-box">Delivered<strong id="transportDelivered">0</strong></div><div class="report-box">Freight<strong id="transportFreight">₹0</strong></div></div></div><div class="card"><div class="table-container"><table><thead><tr><th>LR Number</th><th>Articles</th><th>Freight</th><th>Local Freight</th><th>Status</th></tr></thead><tbody id="transportTable"></tbody></table></div></div></div>
+
+<div id="backupPage" class="page"><button class="back" onclick="showDashboard()">← Back to Dashboard</button><div class="card"><h2>💾 Data Backup & Recovery</h2><button class="save" onclick="backupData()">⬇️ BACKUP DATA</button><br><br><label>Restore Backup File</label><input type="file" accept=".json" onchange="restoreData(event)"></div></div>
+
+<div class="footer">NU EXPORTS | Transport & Parcel Management</div>
+</div>
+
+<script>
+let parcels=JSON.parse(localStorage.getItem("NU_EXPORTS_DATA")||"[]"),editingId=null;
+let openingBalance=JSON.parse(localStorage.getItem("NU_EXPORTS_OPENING_BALANCE")||'{"freight":0,"localFreight":0}');
+const today=()=>new Date().toISOString().split("T")[0];
+function saveData(){localStorage.setItem("NU_EXPORTS_DATA",JSON.stringify(parcels))}
+function safe(v){return String(v||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function readForm(){
+ let lr=document.getElementById("lrNumber").value.trim(),t=document.getElementById("transportName").value.trim(),a=document.getElementById("articles").value;
+ if(!lr){alert("Please enter LR Number");return null} if(!t){alert("Please enter Transport Name");return null} if(!a||Number(a)<1){alert("Please enter Number of Articles");return null}
+ return {lrNumber:lr,transportName:t,articles:Number(a),freight:Number(document.getElementById("freight").value||0),localFreight:Number(document.getElementById("localFreight").value||0),bookingDate:document.getElementById("bookingDate").value,deliveryDate:document.getElementById("deliveryDate").value,status:document.getElementById("deliveryStatus").value}
+}
+function duplicateLR(lr,id=null){return parcels.some(p=>String(p.lrNumber).trim().toLowerCase()==String(lr).trim().toLowerCase()&&p.id!==id)}
+function saveParcel(){
+ let p=readForm();if(!p)return;if(duplicateLR(p.lrNumber)){alert("LR Number already exists!");return}
+ p.id=Date.now();if(!p.bookingDate)p.bookingDate=today();if(p.status=="Delivered"&&!p.deliveryDate)p.deliveryDate=today();parcels.push(p);saveData();clearForm();refreshAll();showDashboard();alert("Parcel Saved Successfully!")
+}
+function editParcel(id){
+ let p=parcels.find(x=>x.id===id);if(!p)return;editingId=id;openPageById("bookingPage");
+ ["lrNumber","transportName","articles","freight","localFreight","bookingDate","deliveryDate","deliveryStatus"].forEach(k=>document.getElementById(k).value=p[k]??"");window.scrollTo({top:0,behavior:"smooth"})
+}
+function updateParcel(){
+ if(editingId===null){alert("First click Edit on a parcel");return}let p=readForm();if(!p)return;if(duplicateLR(p.lrNumber,editingId)){alert("LR Number already exists!");return}
+ let i=parcels.findIndex(x=>x.id===editingId);if(i<0)return;if(p.status=="Delivered"&&!p.deliveryDate)p.deliveryDate=today();parcels[i]={...parcels[i],...p};saveData();clearForm();refreshAll();showDashboard();alert("Parcel Updated Successfully!")
+}
+function clearForm(){["lrNumber","transportName","articles","freight","localFreight","bookingDate","deliveryDate"].forEach(k=>document.getElementById(k).value="");document.getElementById("deliveryStatus").value="Pending";editingId=null}
+function changeStatus(id){let p=parcels.find(x=>x.id===id);if(!p)return;p.status=p.status=="Pending"?"Delivered":"Pending";if(p.status=="Delivered"&&!p.deliveryDate)p.deliveryDate=today();saveData();refreshAll()}
+function deleteParcel(id){if(!confirm("Are you sure you want to delete this parcel?"))return;parcels=parcels.filter(x=>x.id!==id);saveData();refreshAll()}
+function actions(p){return `<button class="action edit" onclick="editParcel(${p.id})">Edit</button><button class="action status" onclick="changeStatus(${p.id})">${p.status=="Pending"?"Delivered":"Pending"}</button><button class="action delete" onclick="deleteParcel(${p.id})">Delete</button>`}
+function row(p){let c=p.status=="Pending"?"pending":"delivered";return `<tr><td>${safe(p.lrNumber)}</td><td>${safe(p.transportName)}</td><td>${p.articles}</td><td>₹${p.freight}</td><td>₹${p.localFreight}</td><td>${p.bookingDate||"-"}</td><td>${p.deliveryDate||"-"}</td><td><span class="badge ${c}">${p.status}</span></td><td>${actions(p)}</td></tr>`}
+function displayAll(){let t=document.getElementById("allTable");t.innerHTML=[...parcels].reverse().map(row).join("")||'<tr><td colspan="9" class="empty">No parcels found</td></tr>'}
+function displayPending(){let l=parcels.filter(p=>p.status=="Pending"),t=document.getElementById("pendingTable");t.innerHTML=l.map(row).join("")||'<tr><td colspan="9" class="empty">No Pending Parcels</td></tr>';document.getElementById("pendingPageCount").textContent=l.length;document.getElementById("pendingArticles").textContent=l.reduce((a,p)=>a+p.articles,0);document.getElementById("pendingFreight").textContent="₹"+l.reduce((a,p)=>a+p.freight,0);document.getElementById("pendingLocal").textContent="₹"+l.reduce((a,p)=>a+p.localFreight,0)}
+function displayDelivery(){let l=parcels.filter(p=>p.status=="Delivered"),t=document.getElementById("deliveryTable");t.innerHTML=l.map(row).join("")||'<tr><td colspan="9" class="empty">No Delivery Parcels</td></tr>';document.getElementById("deliveryPageCount").textContent=l.length;document.getElementById("deliveryArticles").textContent=l.reduce((a,p)=>a+p.articles,0);document.getElementById("deliveryFreight").textContent="₹"+l.reduce((a,p)=>a+p.freight,0);document.getElementById("deliveryLocal").textContent="₹"+l.reduce((a,p)=>a+p.localFreight,0)}
+function updateDashboard(){let total=parcels.length,d=parcels.filter(p=>p.status=="Delivered").length;document.getElementById("totalCount").textContent=total;document.getElementById("pendingCount").textContent=total-d;document.getElementById("deliveredCount").textContent=d;document.getElementById("deliveryPercent").textContent=(total?Math.round(d/total*100):0)+"%";let f=parcels.reduce((a,p)=>a+Number(p.freight||0),0),l=parcels.reduce((a,p)=>a+Number(p.localFreight||0),0);document.getElementById("totalFreight").textContent="₹"+(Number(openingBalance.freight||0)+f);document.getElementById("totalLocalFreight").textContent="₹"+(Number(openingBalance.localFreight||0)+l);document.getElementById("grandTotal").textContent="₹"+(Number(openingBalance.freight||0)+f+Number(openingBalance.localFreight||0)+l);document.getElementById("totalArticles").textContent=parcels.reduce((a,p)=>a+Number(p.articles||0),0);let old=pendingOverdue();document.getElementById("overdueCount").textContent=old.length;document.getElementById("overdueList").innerHTML=old.slice(0,5).map(p=>`<div style="padding:8px 0;border-top:1px solid #eee"><strong>${safe(p.lrNumber)}</strong> — ${safe(p.transportName)} <span style="color:#b45309">(${daysPending(p)} days)</span></div>`).join("")||( '<div style="color:#16834a">No 10+ days pending parcels 🎉</div>');document.getElementById("openingFreight").value=openingBalance.freight||0;document.getElementById("openingLocal").value=openingBalance.localFreight||0}
+function saveOpeningBalance(){openingBalance={freight:Math.max(0,Number(document.getElementById("openingFreight").value||0)),localFreight:Math.max(0,Number(document.getElementById("openingLocal").value||0))};localStorage.setItem("NU_EXPORTS_OPENING_BALANCE",JSON.stringify(openingBalance));updateDashboard();alert("Opening Balance Saved!")}
+function daysPending(p){if(!p.bookingDate)return 0;let a=new Date(p.bookingDate+"T00:00:00"),b=new Date();b.setHours(0,0,0,0);return Math.floor((b-a)/86400000)}
+function pendingOverdue(){return parcels.filter(p=>p.status==="Pending"&&daysPending(p)>=10).sort((a,b)=>daysPending(b)-daysPending(a))}
+function displayRecentBookings(){let b=document.getElementById("recentBookings"),l=[...parcels].sort((a,b)=>b.id-a.id).slice(0,8);b.innerHTML=l.length?'<div class="recent-row recent-head"><div>LR Number</div><div>Transport</div><div>Articles</div><div>Status</div></div>'+l.map(p=>`<div class="recent-row"><div><strong>${safe(p.lrNumber)}</strong></div><div>${safe(p.transportName)}</div><div>${p.articles}</div><div><span class="badge ${p.status=="Pending"?"pending":"delivered"}">${p.status}</span></div></div>`).join(""):'<div class="empty">No Recent Bookings</div>'}
+function displayDailyReport(){let d=document.getElementById("dailyDate").value,l=parcels.filter(p=>p.status=="Delivered"&&(!d||p.deliveryDate==d));document.getElementById("dailyParcels").textContent=l.length;document.getElementById("dailyArticles").textContent=l.reduce((a,p)=>a+p.articles,0);document.getElementById("dailyFreight").textContent="₹"+l.reduce((a,p)=>a+p.freight,0);document.getElementById("dailyLocal").textContent="₹"+l.reduce((a,p)=>a+p.localFreight,0);document.getElementById("dailyTable").innerHTML=l.map(p=>`<tr><td>${safe(p.lrNumber)}</td><td>${safe(p.transportName)}</td><td>${p.articles}</td><td>₹${p.freight}</td><td>₹${p.localFreight}</td><td>${p.deliveryDate||"-"}</td></tr>`).join("")}
+function loadTransportList(){let s=document.getElementById("reportTransport"),names=[...new Set(parcels.map(p=>p.transportName))].sort();s.innerHTML='<option value="">All Transport</option>'+names.map(n=>`<option value="${safe(n)}">${safe(n)}</option>`).join("")}
+function displayTransportReport(){let n=document.getElementById("reportTransport").value,l=n?parcels.filter(p=>p.transportName==n):parcels;document.getElementById("transportParcels").textContent=l.length;document.getElementById("transportPending").textContent=l.filter(p=>p.status=="Pending").length;document.getElementById("transportDelivered").textContent=l.filter(p=>p.status=="Delivered").length;document.getElementById("transportFreight").textContent="₹"+l.reduce((a,p)=>a+p.freight,0);document.getElementById("transportTable").innerHTML=l.map(p=>`<tr><td>${safe(p.lrNumber)}</td><td>${p.articles}</td><td>₹${p.freight}</td><td>₹${p.localFreight}</td><td class="${p.status=="Pending"?"pending":"delivered"}">${p.status}</td></tr>`).join("")}
+function globalSearch(){let q=document.getElementById("globalSearch").value.toLowerCase().trim();if(!q)return;openPageById("allPage");let l=parcels.filter(p=>String(p.lrNumber).toLowerCase().includes(q)||String(p.transportName).toLowerCase().includes(q));document.getElementById("allTable").innerHTML=l.map(row).join("")||'<tr><td colspan="9" class="empty">No parcels found</td></tr>'}
+function openPage(id,btn){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));if(btn)btn.classList.add("active");if(id=="allPage")displayAll();if(id=="pendingPage")displayPending();if(id=="deliveryPage")displayDelivery();if(id=="dailyPage")displayDailyReport();if(id=="transportReportPage"){loadTransportList();displayTransportReport()}window.scrollTo({top:0,behavior:"smooth"})}
+function openPageById(id){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById(id).classList.add("active");if(id=="allPage")displayAll();if(id=="pendingPage")displayPending();if(id=="deliveryPage")displayDelivery();window.scrollTo({top:0,behavior:"smooth"})}
+function showDashboard(){openPageById("dashboardPage")}
+function openDailyToday(){openPageById("dailyPage");document.getElementById("dailyDate").value=today();displayDailyReport()}
+function openDailyYesterday(){let d=new Date();d.setDate(d.getDate()-1);openPageById("dailyPage");document.getElementById("dailyDate").value=d.toISOString().split("T")[0];displayDailyReport()}
+function openWeekReport(){openPageById("dailyPage");document.getElementById("dailyDate").value="";displayDailyReport()}
+function openMonthReport(){openPageById("dailyPage");document.getElementById("dailyDate").value="";displayDailyReport()}
+function backupData(){let blob=new Blob([JSON.stringify(parcels,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="NU_EXPORTS_BACKUP.json";a.click()}
+function restoreData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!Array.isArray(d))throw 0;parcels=d;saveData();refreshAll();alert("Data Restored Successfully!")}catch(x){alert("Unable to restore backup")}};r.readAsText(f)}
+function toggleNav(){document.getElementById("nav").scrollIntoView({behavior:"smooth"})}
+function refreshAll(){updateDashboard();displayRecentBookings();displayAll();displayPending();displayDelivery();loadTransportList();displayTransportReport();displayDailyReport()}
+refreshAll();
+</script>
+</body>
+</html>
